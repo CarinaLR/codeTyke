@@ -26,11 +26,11 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { body, instructions, questions } = req.body;
-    if (body && instructions) {
+    const { body, imageUrl, questions } = req.body;
+    if (body && imageUrl) {
       const newOption = await Option.create({
         body,
-        instructions,
+        imageUrl,
       });
 
       res.status(200).json(newOption);
@@ -45,9 +45,9 @@ router.post("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const question = await Question.findByPk(id);
-    if (question) {
-      res.status(200).json(question);
+    const option = await Option.findByPk(id);
+    if (option) {
+      res.status(200).json(option);
     } else {
       res.sendStatus(400);
     }
@@ -61,10 +61,10 @@ router.put("/:id", async (req, res, next) => {
     const { id } = req.params;
     const optionToUpdate = await Option.findByPk(id);
     if (optionToUpdate) {
-      const { body, instructions } = req.body;
+      const { body, imageUrl } = req.body;
       const updatedOption = await optionToUpdate.update({
         body,
-        instructions,
+        imageUrl,
       });
       res.status(200).json(updatedOption);
     } else {
