@@ -24,23 +24,18 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     const { body, instructions, options } = req.body;
     if (body && instructions) {
-      const newQuestion = await Question.create({
-        body,
-        instructions
-      });
-
-      res.status(200).json(newQuestion);
-    } else {
-      res.sendStatus(400);
-    }
-  } catch (error) {
-    next(error);
-  }
-});
+      if (options) {
+        // if the user is also making 4 options - to validate whether all of the options are unique or not, and before saving a new question to the db
+        const optionsSet = new Set(options);
+        if (optionsSet.size !== 4) {
+          res.sendStatus(400);
+          return;
+        }
+      }
 
 router.get("/:id", async (req, res, next) => {
   try {
