@@ -1,24 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const models = require("../models");
-// const Option = require("../models/option")
-//new structure
 const Option = models.Option;
 
-//three ways of passing in info
-// - req.body - request
-// - req.params - path variable
-// - req.query - query string
-
-// middleware that is specific to this router
-//async functions handle promises.
 router.get("/", async (req, res, next) => {
   try {
-    const options = Option.findAll({
-      //include: [models.Option]
+    const options = await Option.findAll({
       include: ["questions"],
+      // include: [models.Question] // another way to write this
     });
-    res.status(200).res.json(options);
+    res.status(200).json(options);
   } catch (error) {
     next(error);
   }
@@ -26,13 +17,12 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { body, imageUrl, questions } = req.body;
+    const { body, imageUrl } = req.body;
     if (body && imageUrl) {
       const newOption = await Option.create({
         body,
         imageUrl,
       });
-
       res.status(200).json(newOption);
     } else {
       res.sendStatus(400);
