@@ -4,17 +4,16 @@ module.exports = (sequelize, DataTypes) => {
     "Option",
     {
       body: DataTypes.STRING,
-      imageUrl: DataTypes.STRING
+      imageUrl: DataTypes.STRING,
     },
     {}
   );
-  Option.associate = function(models) {
-    // associations can be defined here
+  Option.associate = function (models) {
     Option.belongsToMany(models.Question, {
       through: "QuestionOption",
       as: "questions",
       foreignKey: "optionId",
-      otherKey: "questionId"
+      otherKey: "questionId",
     });
   };
   return Option;
